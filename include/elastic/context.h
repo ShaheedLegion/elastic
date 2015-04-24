@@ -21,6 +21,7 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include "elastic/resources/resource_provider.h"
 #include "elastic/resources/resource_store.h"
 #include "elastic/views/context_view.h"
 
@@ -30,14 +31,14 @@ class View;
 
 class Context : public sf::Drawable {
 public:
-  Context();
+  explicit Context(ResourceProvider* resourceProvider);
   ~Context();
 
   // Get the root view of the context.
   ContextView* getRoot() { return &m_contextView; }
 
   // Resources
-  virtual sf::Font* getFont(const std::string& name) = 0;
+  sf::Font* getFont(const std::string& name);
 
   void handleInput(sf::Event& event);
   void tick(float adjustment);
@@ -45,6 +46,9 @@ public:
 
 protected:
   friend class View;
+
+  // The resource provider we use to get resources for the UI.
+  ResourceProvider* m_resourceProvider = nullptr;
 
   // The root view of our hierarchy.
   mutable ContextView m_contextView;

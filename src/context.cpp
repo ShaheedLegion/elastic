@@ -16,10 +16,16 @@
 
 namespace el {
 
-Context::Context() : m_contextView(this) {
+Context::Context(ResourceProvider* resourceProvider)
+  : m_resourceProvider(resourceProvider), m_contextView(this) {
 }
 
 Context::~Context() {
+}
+
+sf::Font* Context::getFont(const std::string& name) {
+  // DCHECK(m_resourceProvider);
+  return m_resourceProvider->getFont(name);
 }
 
 void Context::handleInput(sf::Event& event) {
