@@ -19,29 +19,35 @@ namespace el {
 ColorView::ColorView(Context* context) : View(context) {
 }
 
-ColorView::ColorView(Context* context, const sf::Color& color) : View(context) {
+ColorView::ColorView(Context* context, const ca::Color& color) : View(context) {
   setColor(color);
 }
 
 ColorView::~ColorView() {
 }
 
-void ColorView::setColor(const sf::Color& color) {
+void ColorView::setColor(const ca::Color& color) {
   m_color = color;
-  m_drawable.setFillColor(color);
+#if 0
+  m_geometry.setFillColor(color);
+#endif  // 0
 }
 
-void ColorView::layout(const sf::IntRect& rect) {
+void ColorView::layout(const ca::Rect<i32>& rect) {
   View::layout(rect);
 
+#if 0
   m_drawable.setPosition(sf::Vector2f(static_cast<float>(rect.left),
                                       static_cast<float>(rect.top)));
   m_drawable.setSize(sf::Vector2f(static_cast<float>(rect.width),
                                   static_cast<float>(rect.height)));
+#endif  // 0
 }
 
-void ColorView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void ColorView::render(ca::Canvas* canvas) const {
+#if 0
   target.draw(m_drawable, states);
+#endif  // 0
 }
 
 }  // namespace el

@@ -15,8 +15,7 @@
 #ifndef ELASTIC_VIEWS_COLOR_VIEW_H_
 #define ELASTIC_VIEWS_COLOR_VIEW_H_
 
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "canvas/rendering/geometry.h"
 
 #include "elastic/views/view.h"
 
@@ -25,24 +24,23 @@ namespace el {
 class ColorView : public View {
 public:
   explicit ColorView(Context* context);
-  ColorView(Context* context, const sf::Color& color);
+  ColorView(Context* context, const ca::Color& color);
   virtual ~ColorView();
 
   // color
-  const sf::Color& getColor() const { return m_color; }
-  void setColor(const sf::Color& color);
+  const ca::Color& getColor() const { return m_color; }
+  void setColor(const ca::Color& color);
 
   // Override: View
-  virtual void layout(const sf::IntRect& rect) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  virtual void layout(const ca::Rect<i32>& rect) override;
+  virtual void render(ca::Canvas* canvas) const override;
 
 private:
   // The color of the view.
-  sf::Color m_color;
+  ca::Color m_color;
 
   // The geometry used to render the view.
-  sf::RectangleShape m_drawable;
+  ca::Geometry m_geometry;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(ColorView);
 };

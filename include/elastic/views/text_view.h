@@ -15,7 +15,7 @@
 #ifndef ELASTIC_VIEWS_TEXT_VIEW_H_
 #define ELASTIC_VIEWS_TEXT_VIEW_H_
 
-#include <SFML/Graphics/Text.hpp>
+#include "canvas/rendering/text.h"
 
 #include "elastic/views/view.h"
 
@@ -31,16 +31,16 @@ public:
   void setLabel(const std::string& label);
 
   // Override: View
-  sf::Vector2i calculateMinSize() const override;
-  void layout(const sf::IntRect& rect) override;
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  ca::Size<i32> calculateMinSize() const override;
+  void layout(const ca::Rect<i32>& rect) override;
+  void render(ca::Canvas* canvas) const override;
 
 private:
   // The label we render.
   std::string m_label;
 
   // The shape we use to render the text.
-  sf::Text m_shape;
+  ca::Text m_text;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(TextView);
 };

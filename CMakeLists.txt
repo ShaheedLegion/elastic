@@ -6,7 +6,7 @@ project("elastic")
 option(ELASTIC_BUILD_DEPENDENCIES "Build all dependencies with this library")
 if (ELASTIC_BUILD_DEPENDENCIES)
   include("cmake/nucleus.cmake")
-  include("cmake/sfml.cmake")
+  include("cmake/canvas.cmake")
 endif()
 
 # Options
@@ -53,7 +53,7 @@ if(ELASTIC_BUILD_TESTS)
 endif()
 
 add_library("elastic" STATIC ${elastic_INCLUDE_FILES} ${elastic_SOURCE_FILES})
-target_link_libraries("elastic" "nucleus" "sfml-graphics" "sfml-window" "sfml-system")
+target_link_libraries("elastic" "nucleus" "canvas")
 target_include_directories("elastic" PUBLIC "${elastic_SOURCE_DIR}/include")
 set_property(TARGET "elastic" PROPERTY FOLDER "elastic")
 

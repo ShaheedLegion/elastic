@@ -17,9 +17,9 @@
 
 #include <string>
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Window/Event.hpp>
+#include "canvas/windows/event.h"
+#include "canvas/rendering/canvas.h"
+#include "canvas/rendering/font.h"
 
 #include "elastic/resources/resource_store.h"
 #include "elastic/views/context_view.h"
@@ -28,7 +28,7 @@ namespace el {
 
 class View;
 
-class Context : public sf::Drawable {
+class Context {
 public:
   Context();
   ~Context();
@@ -41,11 +41,13 @@ public:
   void setFocusView(View* view);
 
   // Resources
-  virtual sf::Font* getFont(const std::string& name) = 0;
+  virtual ca::Font* getFont(const std::string& name) = 0;
 
-  void handleInput(sf::Event& event);
+  void onMouseMoved(const ca::MouseEvent& evt);
+  void onMousePressed(const ca::MouseEvent& evt);
+  void onMouseReleased(const ca::MouseEvent& evt);
   void tick(float adjustment);
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void render(ca::Canvas* canvas) const;
 
 protected:
   friend class View;

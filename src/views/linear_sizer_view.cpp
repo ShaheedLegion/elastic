@@ -34,31 +34,31 @@ void LinearSizerView::SetOrientation(OrientationType orientation) {
   m_orientation = orientation;
 }
 
-sf::Vector2i LinearSizerView::calculateMinSize() const {
-  sf::Vector2i minSize(GroupView::calculateMinSize());
+ca::Size<i32> LinearSizerView::calculateMinSize() const {
+  ca::Size<i32> minSize{GroupView::calculateMinSize()};
 
-  sf::Vector2i contentSize;
+  ca::Size<i32> contentSize;
   if (m_orientation == OrientationHorizontal) {
     for (const auto& child : m_children) {
-      sf::Vector2i childMinSize{child->calculateMinSize()};
-      contentSize.x += childMinSize.x;
-      contentSize.y = std::max(contentSize.y, childMinSize.y);
+      ca::Size<i32> childMinSize{child->calculateMinSize()};
+      contentSize.width += childMinSize.width;
+      contentSize.height = std::max(contentSize.height, childMinSize.height);
     }
   } else {
     for (const auto& child : m_children) {
-      sf::Vector2i childMinSize{child->calculateMinSize()};
-      contentSize.x = std::max(contentSize.x, childMinSize.x);
-      contentSize.y += childMinSize.y;
+      ca::Size<i32> childMinSize{child->calculateMinSize()};
+      contentSize.width = std::max(contentSize.width, childMinSize.width);
+      contentSize.height += childMinSize.height;
     }
   }
 
-  minSize.x = std::max(minSize.x, contentSize.x);
-  minSize.y = std::max(minSize.y, contentSize.y);
+  minSize.width = std::max(minSize.width, contentSize.width);
+  minSize.height = std::max(minSize.height, contentSize.height);
 
   return minSize;
 }
 
-void LinearSizerView::layout(const sf::IntRect& rect) {
+void LinearSizerView::layout(const ca::Rect<i32>& rect) {
   GroupView::layout(rect);
 
   if (m_orientation == OrientationHorizontal)
@@ -67,13 +67,13 @@ void LinearSizerView::layout(const sf::IntRect& rect) {
     layoutVertical(rect);
 }
 
-void LinearSizerView::layoutHorizontal(const sf::IntRect& rect) {
+void LinearSizerView::layoutHorizontal(const ca::Rect<i32>& rect) {
   // Make place where we can store the size for each child.
-  std::vector<std::pair<int32_t, sf::Vector2i>> sizes;
-  sizes.resize(m_children.size(), std::make_pair(0, sf::Vector2i{}));
+  std::vector<std::pair<i32, ca::Size<i32>>> sizes;
+  sizes.resize(m_children.size(), std::make_pair(0, ca::Size<i32>{}));
 
   // The total width available to us.
-  int32_t totalSize = rect.width;
+  int32_t totalSize = rect.size.width;
   int32_t totalProportion = 0;
   for (size_t i = 0; i < m_children.size(); ++i) {
     sizes[i].first = m_children[i]->getProportion();
@@ -83,7 +83,7 @@ void LinearSizerView::layoutHorizontal(const sf::IntRect& rect) {
     totalProportion += m_children[i]->getProportion();
 
     // Adjust the space we have to divide between the views.
-    totalSize -= sizes[i].second.x;
+    totalSize -= sizes[i].second.width;
   }
 
   // Calculate the size we have per proportion for each view.
@@ -91,12 +91,12 @@ void LinearSizerView::layoutHorizontal(const sf::IntRect& rect) {
       static_cast<float>(totalSize) / static_cast<float>(totalProportion);
 
   // Start with the entire area we have available.
-  sf::IntRect sectionRect(rect);
+  ca::Rect<i32> sectionRect{rect};
   for (size_t i = 0; i < m_children.size(); ++i) {
     // The height available is the minSize of the view + the amount we receive
     // from the total left over space.
-    sectionRect.width =
-        sizes[i].second.x +
+    sectionRect.size.width =
+        sizes[i].second.width +
         std::lround(singleProportionSize *
                     static_cast<float>(m_children[i]->getProportion()));
 
@@ -105,17 +105,17 @@ void LinearSizerView::layoutHorizontal(const sf::IntRect& rect) {
 
     // Adjust the top of the layout rect to where the next view will be layed
     // out.
-    sectionRect.left += sectionRect.width;
+    sectionRect.size.width += sectionRect.size.width;
   }
 }
 
-void LinearSizerView::layoutVertical(const sf::IntRect& rect) {
+void LinearSizerView::layoutVertical(const ca::Rect<i32>& rect) {
   // Make place where we can store the size for each child.
-  std::vector<std::pair<int32_t, sf::Vector2i>> sizes;
-  sizes.resize(m_children.size(), std::make_pair(0, sf::Vector2i{}));
+  std::vector<std::pair<int32_t, ca::Size<i32>>> sizes;
+  sizes.resize(m_children.size(), std::make_pair(0, ca::Size<i32>{}));
 
   // The total height available to us.
-  int32_t totalSize = rect.height;
+  int32_t totalSize = rect.size.height;
   int32_t totalProportion = 0;
   for (size_t i = 0; i < m_children.size(); ++i) {
     sizes[i].first = m_children[i]->getProportion();
@@ -125,7 +125,7 @@ void LinearSizerView::layoutVertical(const sf::IntRect& rect) {
     totalProportion += m_children[i]->getProportion();
 
     // Adjust the space we have to divide between the views.
-    totalSize -= sizes[i].second.y;
+    totalSize -= sizes[i].second.height;
   }
 
   // Calculate the size we have per proportion for each view.
@@ -133,12 +133,12 @@ void LinearSizerView::layoutVertical(const sf::IntRect& rect) {
       static_cast<float>(totalSize) / static_cast<float>(totalProportion);
 
   // Start with the entire area we have available.
-  sf::IntRect sectionRect(rect);
+  ca::Rect<i32> sectionRect{rect};
   for (size_t i = 0; i < m_children.size(); ++i) {
     // The height available is the minSize of the view + the amount we receive
     // from the total left over space.
-    sectionRect.height =
-        sizes[i].second.y +
+    sectionRect.size.height =
+        sizes[i].second.height +
         std::lround(singleProportionSize *
                     static_cast<float>(m_children[i]->getProportion()));
 
@@ -147,7 +147,7 @@ void LinearSizerView::layoutVertical(const sf::IntRect& rect) {
 
     // Adjust the top of the layout rect to where the next view will be layed
     // out.
-    sectionRect.top += sectionRect.height;
+    sectionRect.pos.y += sectionRect.size.height;
   }
 }
 

@@ -21,14 +21,14 @@ namespace el {
 TextView::TextView(Context* context, const std::string& label)
   : View(context), m_label(label) {
   // Set up the text shape.
-  sf::Font* labelFont = context->getFont("default");
+  ca::Font* labelFont = context->getFont("default");
 
   // Set up the label.
   if (labelFont) {
-    m_shape.setString(m_label);
-    m_shape.setFont(*labelFont);
-    m_shape.setColor(sf::Color{255, 255, 255});
-    m_shape.setCharacterSize(30);
+    m_text.setText(m_label);
+    m_text.setFont(labelFont);
+    // m_text.setColor(sf::Color{255, 255, 255});
+    m_text.setTextSize(30);
   }
 }
 
@@ -39,26 +39,33 @@ void TextView::setLabel(const std::string& label) {
   m_label = label;
 
   // Set the label on the shape.
-  m_shape.setString(label);
+  m_text.setText(label);
 }
 
-sf::Vector2i TextView::calculateMinSize() const {
+ca::Size<i32> TextView::calculateMinSize() const {
+#if 0
   sf::FloatRect bounds = m_shape.getLocalBounds();
   return sf::Vector2i{static_cast<int>(std::ceil(bounds.width)),
                       static_cast<int>(std::ceil(bounds.height))};
+#endif  // 0
+  return ca::Size<i32>{};
 }
 
-void TextView::layout(const sf::IntRect& rect) {
+void TextView::layout(const ca::Rect<i32>& rect) {
+#if 0
   sf::FloatRect floatLabelSize{m_shape.getLocalBounds()};
 
   // Move the shape to the correct position.
   m_shape.setPosition(
       sf::Vector2f{static_cast<float>(rect.left) - floatLabelSize.left,
                    static_cast<float>(rect.top) - floatLabelSize.top});
+#endif  // 0
 }
 
-void TextView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(m_shape, states);
+void TextView::render(ca::Canvas* canvas) const {
+#if 0
+  m_text.render(canvas, ...);
+#endif  // 0
 }
 
 }  // namespace el

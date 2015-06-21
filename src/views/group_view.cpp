@@ -17,34 +17,36 @@
 namespace el {
 
 // static
-sf::IntRect GroupView::layoutControlInRect(View* view,
-                                           const sf::IntRect& rect) {
-  sf::Vector2i minSize{view->calculateMinSize()};
-  sf::IntRect viewRect{rect.left, rect.top, minSize.x, minSize.y};
+ca::Rect<i32> GroupView::layoutControlInRect(View* view,
+                                             const ca::Rect<i32>& rect) {
+  ca::Size<i32> minSize{view->calculateMinSize()};
+  ca::Rect<i32> viewRect{rect.pos.x, rect.pos.y, minSize.width, minSize.height};
 
   const ExpandType expand = view->getExpand();
 
   // Apply the horizontal alignment and expand.
   if (expand == ExpandHorizontal || expand == ExpandBoth) {
-    viewRect.width = rect.width;
+    viewRect.size.width = rect.size.width;
   } else {
     AlignType horizontalAlign = view->getHorizontalAlign();
     if (horizontalAlign == AlignRight) {
-      viewRect.left = rect.left + rect.width - viewRect.width;
+      viewRect.pos.x = rect.pos.x + rect.size.width - viewRect.size.width;
     } else if (horizontalAlign == AlignCenter) {
-      viewRect.left = rect.left + (rect.width / 2) - (viewRect.width / 2);
+      viewRect.pos.x =
+          rect.pos.x + (rect.size.width / 2) - (viewRect.size.width / 2);
     }
   }
 
   // Apply the vertical alignment and expand.
   if (expand == ExpandVertical || expand == ExpandBoth) {
-    viewRect.height = rect.height;
+    viewRect.size.height = rect.size.height;
   } else {
     AlignType verticalAlign = view->getVerticalAlign();
     if (verticalAlign == AlignBottom) {
-      viewRect.top = rect.top + rect.height - viewRect.height;
+      viewRect.pos.y = rect.pos.y + rect.size.height - viewRect.size.height;
     } else if (verticalAlign == AlignCenter) {
-      viewRect.top = rect.top + (rect.height / 2) - (viewRect.height / 2);
+      viewRect.pos.y =
+          rect.pos.y + (rect.size.height / 2) - (viewRect.size.height / 2);
     }
   }
 
@@ -74,7 +76,7 @@ void GroupView::removeChild(View* view) {
   m_children.erase(it);
 }
 
-View* GroupView::getViewAtPosition(const sf::Vector2i& pos) {
+View* GroupView::getViewAtPosition(const ca::Pos<i32>& pos) {
   View* foundView = nullptr;
 
   for (View* view : m_children) {
@@ -107,11 +109,11 @@ void GroupView::tick(float adjustment) {
   }
 }
 
-void GroupView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  View::draw(target, states);
+void GroupView::render(ca::Canvas* canvas) const {
+  View::render(canvas);
 
   for (auto& child : m_children) {
-    target.draw(*child, states);
+    child->render(canvas);
   }
 }
 

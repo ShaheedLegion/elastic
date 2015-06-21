@@ -25,22 +25,24 @@ public:
   virtual ~ContextView();
 
   // Override: StackedSizerView
-  virtual bool onMousePressed(sf::Event& event) override;
-  virtual bool onMouseDragged(sf::Event& event) override;
-  virtual void onMouseReleased(sf::Event& event) override;
-  virtual void onMouseMoved(sf::Event& event) override;
+  virtual bool onMousePressed(const ca::MouseEvent& event) override;
+  virtual bool onMouseDragged(const ca::MouseEvent& event) override;
+  virtual void onMouseReleased(const ca::MouseEvent& event) override;
+  virtual void onMouseMoved(const ca::MouseEvent& event) override;
 
 private:
   friend class Context;
 
   // Initiate user input from the context.
-  bool processMousePressed(sf::Event& event, bool isDouble);
-  void processMouseDragged(sf::Event& event);
-  void processMouseReleased(sf::Event& event);
-  void processMouseMoved(sf::Event& event);
-  void processMouseWheel(sf::Event& event);
+  bool processMousePressed(const ca::MouseEvent& event, bool isDouble);
+  void processMouseDragged(const ca::MouseEvent& event);
+  void processMouseReleased(const ca::MouseEvent& event);
+  void processMouseMoved(const ca::MouseEvent& event);
+  void processMouseWheel(const ca::MouseEvent& event);
+#if 0
   void processKeyPressed(sf::Event& event);
   void processKeyReleased(sf::Event& event);
+#endif  // 0
 
   // Keeps track of whether the last mouse event was a move event.
   bool m_lastMouseEventWasMove{false};
@@ -52,7 +54,7 @@ private:
   bool m_isMouseDown{false};
 
   // Keeps track of the last position we moved the mouse at.
-  sf::Vector2i m_lastMouseMovePos;
+  ca::Pos<i32> m_lastMouseMovePos;
 
   // The view that we last pressed on.
   View* m_mousePressedHandler{nullptr};

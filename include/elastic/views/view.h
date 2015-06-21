@@ -18,17 +18,19 @@
 #include <cstdint>
 #include <string>
 
-#include <nucleus/macros.h>
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Window/Event.hpp>
+#include "canvas/rendering/canvas.h"
+#include "canvas/utils/size.h"
+#include "canvas/utils/rect.h"
+#include "canvas/windows/event.h"
+#include "nucleus/macros.h"
+#include "nucleus/types.h"
 
 namespace el {
 
 class Context;
 class GroupView;
 
-class View : public sf::Drawable {
+class View {
 public:
   enum AlignType {
     AlignLeft,
@@ -46,7 +48,7 @@ public:
   };
 
   explicit View(Context* context);
-  virtual ~View();
+  virtual ~View() = default;
 
   // Return the parent of the view, if any.
   View* getParent() const { return m_parent; }
@@ -56,8 +58,8 @@ public:
   void setName(const std::string& name);
 
   // minsize
-  const sf::Vector2i& getMinSize() const { return m_minSize; }
-  void setMinSize(const sf::Vector2i& minSize);
+  const ca::Size<i32>& getMinSize() const { return m_minSize; }
+  void setMinSize(const ca::Size<i32>& minSize);
 
   // horizontalalign
   AlignType getHorizontalAlign() const { return m_horizontalAlign; }
@@ -72,38 +74,38 @@ public:
   void setExpand(ExpandType expand);
 
   // proportion
-  int32_t getProportion() const { return m_proportion; }
-  void setProportion(int32_t proportion);
+  i32 getProportion() const { return m_proportion; }
+  void setProportion(i32 proportion);
 
   // Virtual Interface
 
   // Get the view/child view at this position.
-  virtual View* getViewAtPosition(const sf::Vector2i& pos);
+  virtual View* getViewAtPosition(const ca::Pos<i32>& pos);
 
   // Return true if you want to receive input events on this view.  If not,
   // events will be processed by this view's parents.
   virtual bool handlesInput() const { return false; }
 
   virtual void tick(float adjustment);
-  virtual sf::Vector2i calculateMinSize() const;
-  virtual void layout(const sf::IntRect& rect);
+  virtual ca::Size<i32> calculateMinSize() const;
+  virtual void layout(const ca::Rect<i32>& rect);
 
   // Events
 
-  virtual bool onMousePressed(sf::Event& event);
-  virtual bool onMouseDragged(sf::Event& event);
-  virtual void onMouseMoved(sf::Event& event);
-  virtual void onMouseReleased(sf::Event& event);
-  virtual void onMouseWheel(sf::Event& event);
-  virtual void onMouseEntered(sf::Event& event);
-  virtual void onMouseExited(sf::Event& event);
+  virtual bool onMousePressed(const ca::MouseEvent& evt);
+  virtual bool onMouseDragged(const ca::MouseEvent& evt);
+  virtual void onMouseMoved(const ca::MouseEvent& evt);
+  virtual void onMouseReleased(const ca::MouseEvent& event);
+  virtual void onMouseWheel(const ca::MouseEvent& evt);
+  virtual void onMouseEntered(const ca::MouseEvent& evt);
+  virtual void onMouseExited(const ca::MouseEvent& evt);
 
-  virtual void onKeyPressed(sf::Event& event);
-  virtual void onKeyReleased(sf::Event& event);
+#if 0
+  virtual void onKeyPressed(const ca::KeyboardEvent& evt);
+  virtual void onKeyReleased(const ca::KeyboardEvent& evt);
+#endif  // 0
 
-  // Override: sf::Drawable
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  virtual void render(ca::Canvas* canvas) const;
 
 protected:
   friend class GroupView;
@@ -118,10 +120,10 @@ protected:
   std::string m_name;
 
   // The rect where this view has been layed out to.
-  sf::IntRect m_rect;
+  ca::Rect<i32> m_rect;
 
   // The minimum size of the view.
-  sf::Vector2i m_minSize;
+  ca::Size<i32> m_minSize;
 
   // Horizontal/vertical align.
   AlignType m_horizontalAlign{AlignCenter};

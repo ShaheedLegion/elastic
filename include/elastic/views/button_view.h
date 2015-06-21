@@ -17,8 +17,8 @@
 
 #include <string>
 
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Text.hpp>
+#include "canvas/rendering/geometry.h"
+#include "canvas/rendering/text.h"
 
 #include "elastic/views/view.h"
 
@@ -42,14 +42,13 @@ public:
 
   // Override: View
   virtual bool handlesInput() const { return true; }
-  virtual bool onMousePressed(sf::Event& event) override;
-  virtual void onMouseReleased(sf::Event& event) override;
-  virtual void onMouseEntered(sf::Event& event) override;
-  virtual void onMouseExited(sf::Event& event) override;
-  virtual sf::Vector2i calculateMinSize() const override;
-  virtual void layout(const sf::IntRect& rect) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  virtual bool onMousePressed(const ca::MouseEvent& event) override;
+  virtual void onMouseReleased(const ca::MouseEvent& event) override;
+  virtual void onMouseEntered(const ca::MouseEvent& event) override;
+  virtual void onMouseExited(const ca::MouseEvent& event) override;
+  virtual ca::Size<i32> calculateMinSize() const override;
+  virtual void layout(const ca::Rect<i32>& rect) override;
+  virtual void render(ca::Canvas* canvas) const override;
 
 private:
   // The label we print on the button.
@@ -59,10 +58,10 @@ private:
   OnClickListener* m_listener;
 
   // The shape we use to render a background for the button.
-  sf::RectangleShape m_backgroundShape;
+  ca::Geometry m_backgroundShape;
 
   // The shape we use to render the label.
-  sf::Text m_labelShape;
+  ca::Text m_labelShape;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(ButtonView);
 };

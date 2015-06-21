@@ -35,12 +35,12 @@ public:
   void SetOrientation(OrientationType orientation);
 
   // Override: GroupView
-  virtual sf::Vector2i calculateMinSize() const override;
-  virtual void layout(const sf::IntRect& rect) override;
+  virtual ca::Size<i32> calculateMinSize() const override;
+  virtual void layout(const ca::Rect<i32>& rect) override;
 
 private:
-  void layoutHorizontal(const sf::IntRect& rect);
-  void layoutVertical(const sf::IntRect& rect);
+  void layoutHorizontal(const ca::Rect<i32>& rect);
+  void layoutVertical(const ca::Rect<i32>& rect);
 
   // The orientaion of the sizer.
   OrientationType m_orientation;

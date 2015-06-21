@@ -26,18 +26,31 @@ void Context::setFocusView(View* view) {
   m_focusView = view;
 }
 
+void Context::onMouseMoved(const ca::MouseEvent& evt) {
+  m_contextView.processMouseMoved(evt);
+}
+
+void Context::onMousePressed(const ca::MouseEvent& evt) {
+  m_contextView.processMousePressed(evt, false);
+}
+
+void Context::onMouseReleased(const ca::MouseEvent& evt) {
+  m_contextView.processMouseReleased(evt);
+}
+
+#if 0
 void Context::handleInput(sf::Event& event) {
   switch (event.type) {
     case sf::Event::MouseButtonPressed: {
-      m_contextView.processMousePressed(event, false);
+      
     } break;
 
     case sf::Event::MouseMoved: {
-      m_contextView.processMouseMoved(event);
+      
     } break;
 
     case sf::Event::MouseButtonReleased: {
-      m_contextView.processMouseReleased(event);
+      
     } break;
 
     case sf::Event::MouseWheelMoved: {
@@ -58,18 +71,21 @@ void Context::handleInput(sf::Event& event) {
       break;
   }
 }
+#endif  // 0
 
 void Context::tick(float adjustment) {
   m_contextView.tick(adjustment);
 }
 
-void Context::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Context::render(ca::Canvas* canvas) const {
+#if 0
   // Get the size of the render target in pixels for the UI to render.
   sf::IntRect layoutRect{0, 0, static_cast<int>(target.getSize().x),
                          static_cast<int>(target.getSize().y)};
 
   m_contextView.layout(layoutRect);
   target.draw(m_contextView, states);
+#endif  // 0
 }
 
 }  // namespace el

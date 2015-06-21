@@ -24,23 +24,24 @@ StackedSizerView::StackedSizerView(Context* context) : GroupView(context) {
 StackedSizerView::~StackedSizerView() {
 }
 
-sf::Vector2i StackedSizerView::calculateMinSize() const {
-  sf::Vector2i minSize(GroupView::calculateMinSize());
+ca::Size<i32> StackedSizerView::calculateMinSize() const {
+  ca::Size<i32> minSize(GroupView::calculateMinSize());
 
   for (auto& child : m_children) {
-    sf::Vector2i childSize{child->calculateMinSize()};
-    minSize.x = std::max(minSize.x, childSize.x);
-    minSize.y = std::max(minSize.y, childSize.y);
+    ca::Size<i32> childSize{child->calculateMinSize()};
+    minSize.width = std::max(minSize.width, childSize.width);
+    minSize.height = std::max(minSize.height, childSize.height);
   }
 
   return minSize;
 }
 
-void StackedSizerView::layout(const sf::IntRect& rect) {
+void StackedSizerView::layout(const ca::Rect<i32>& rect) {
   GroupView::layout(rect);
 
-  for (auto& child : m_children)
+  for (auto& child : m_children) {
     child->layout(GroupView::layoutControlInRect(child, rect));
+  }
 }
 
 }  // namespace el

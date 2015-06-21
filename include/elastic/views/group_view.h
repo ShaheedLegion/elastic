@@ -23,7 +23,8 @@ namespace el {
 
 class GroupView : public View {
 public:
-  static sf::IntRect layoutControlInRect(View* view, const sf::IntRect& rect);
+  static ca::Rect<i32> layoutControlInRect(View* view,
+                                           const ca::Rect<i32>& rect);
 
   explicit GroupView(Context* context);
   virtual ~GroupView();
@@ -32,12 +33,11 @@ public:
   void removeChild(View* view);
 
   // Return a pointer to the view that is at the given coordinates.
-  virtual View* getViewAtPosition(const sf::Vector2i& pos) override;
+  virtual View* getViewAtPosition(const ca::Pos<i32>& pos) override;
 
   // Override: View
   virtual void tick(float adjustment) override;
-  virtual void draw(sf::RenderTarget& target,
-                    sf::RenderStates states) const override;
+  virtual void render(ca::Canvas* canvas) const override;
 
 protected:
   // This view's child views.

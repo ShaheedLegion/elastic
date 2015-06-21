@@ -23,14 +23,11 @@ namespace el {
 View::View(Context* context) : m_context(context) {
 }
 
-View::~View() {
-}
-
 void View::setName(const std::string& name) {
   m_name = name;
 }
 
-void View::setMinSize(const sf::Vector2i& minSize) {
+void View::setMinSize(const ca::Size<i32>& minSize) {
   m_minSize = minSize;
 }
 
@@ -50,7 +47,7 @@ void View::setProportion(int32_t proportion) {
   m_proportion = proportion;
 }
 
-View* View::getViewAtPosition(const sf::Vector2i& pos) {
+View* View::getViewAtPosition(const ca::Pos<i32>& pos) {
   if (!handlesInput())
     return nullptr;
 
@@ -60,44 +57,46 @@ View* View::getViewAtPosition(const sf::Vector2i& pos) {
 void View::tick(float adjustment) {
 }
 
-sf::Vector2i View::calculateMinSize() const {
+ca::Size<i32> View::calculateMinSize() const {
   return m_minSize;
 }
 
-void View::layout(const sf::IntRect& rect) {
+void View::layout(const ca::Rect<i32>& rect) {
   m_rect = rect;
 }
 
-bool View::onMousePressed(sf::Event& event) {
+bool View::onMousePressed(const ca::MouseEvent& event) {
   return false;
 }
 
-bool View::onMouseDragged(sf::Event& event) {
+bool View::onMouseDragged(const ca::MouseEvent& event) {
   return false;
 }
 
-void View::onMouseMoved(sf::Event& event) {
+void View::onMouseMoved(const ca::MouseEvent& event) {
 }
 
-void View::onMouseReleased(sf::Event& event) {
+void View::onMouseReleased(const ca::MouseEvent& event) {
 }
 
-void View::onMouseWheel(sf::Event& event) {
+void View::onMouseWheel(const ca::MouseEvent& event) {
 }
 
-void View::onMouseEntered(sf::Event& event) {
+void View::onMouseEntered(const ca::MouseEvent& event) {
 }
 
-void View::onMouseExited(sf::Event& event) {
+void View::onMouseExited(const ca::MouseEvent& event) {
 }
 
-void View::onKeyPressed(sf::Event& event) {
+#if 0
+void View::onKeyPressed(const ca::KeyboardEvent& event) {
 }
 
-void View::onKeyReleased(sf::Event& event) {
+void View::onKeyReleased(const ca::KeyboardEvent& event) {
 }
+#endif  // 0
 
-void View::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void View::render(ca::Canvas* canvas) const {
 }
 
 }  // namespace el

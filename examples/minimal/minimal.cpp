@@ -12,25 +12,13 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
+#include "canvas/app.h"
+#include "canvas/rendering/canvas.h"
 
-int main(int argc, char* argv[]) {
-  sf::RenderWindow window{sf::VideoMode{800, 600}, "elastic - Minimal"};
-
-  while (window.isOpen()) {
-    sf::Event event;
-    if (window.pollEvent(event)) {
-      switch (event.type) {
-      case sf::Event::Closed:
-        window.close();
-        break;
-      }
-    }
-
-    window.clear(sf::Color{0, 0, 0, 0});
-    window.display();
+class Minimal : public ca::WindowDelegate {
+  void onPaint(ca::Canvas* canvas) override {
+    canvas->clear(ca::Color{255, 0, 0, 255});
   }
+};
 
-  return 0;
-}
+CANVAS_APP(Minimal);
