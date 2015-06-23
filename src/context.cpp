@@ -14,6 +14,8 @@
 
 #include "elastic/context.h"
 
+#include "canvas/math/transform.h"
+
 namespace el {
 
 Context::Context() : m_contextView(this) {
@@ -78,14 +80,15 @@ void Context::tick(float adjustment) {
 }
 
 void Context::render(ca::Canvas* canvas) const {
-#if 0
   // Get the size of the render target in pixels for the UI to render.
-  sf::IntRect layoutRect{0, 0, static_cast<int>(target.getSize().x),
-                         static_cast<int>(target.getSize().y)};
+  ca::Rect<i32> layoutRect{ca::Pos<i32>{}, canvas->getSize()};
+
+  ca::Mat4 transform =
+      ca::ortho(0.0f, static_cast<f32>(layoutRect.size.width),
+                static_cast<f32>(layoutRect.size.height), 0.0f);
 
   m_contextView.layout(layoutRect);
-  target.draw(m_contextView, states);
-#endif  // 0
+  m_contextView.render(canvas, transform);
 }
 
 }  // namespace el

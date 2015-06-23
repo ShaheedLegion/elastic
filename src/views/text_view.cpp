@@ -14,6 +14,8 @@
 
 #include "elastic/views/text_view.h"
 
+#include "canvas/math/transform.h"
+
 #include "elastic/context.h"
 
 namespace el {
@@ -48,7 +50,7 @@ ca::Size<i32> TextView::calculateMinSize() const {
   return sf::Vector2i{static_cast<int>(std::ceil(bounds.width)),
                       static_cast<int>(std::ceil(bounds.height))};
 #endif  // 0
-  return ca::Size<i32>{};
+  return ca::Size<i32>{300, 300};
 }
 
 void TextView::layout(const ca::Rect<i32>& rect) {
@@ -62,10 +64,14 @@ void TextView::layout(const ca::Rect<i32>& rect) {
 #endif  // 0
 }
 
-void TextView::render(ca::Canvas* canvas) const {
-#if 0
-  m_text.render(canvas, ...);
-#endif  // 0
+void TextView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
+  View::render(canvas, transform);
+
+  ca::Mat4 local =
+      ca::translate(transform, ca::Vec3{static_cast<f32>(m_rect.pos.x),
+                                        static_cast<f32>(m_rect.pos.y), 0.f});
+
+  m_text.render(canvas, local);
 }
 
 }  // namespace el

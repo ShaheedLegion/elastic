@@ -109,11 +109,11 @@ void GroupView::tick(float adjustment) {
   }
 }
 
-void GroupView::render(ca::Canvas* canvas) const {
-  View::render(canvas);
+void GroupView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
+  View::render(canvas, transform);
 
   for (auto& child : m_children) {
-    child->render(canvas);
+    child->render(canvas, transform);
   }
 }
 

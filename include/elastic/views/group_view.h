@@ -37,7 +37,8 @@ public:
 
   // Override: View
   virtual void tick(float adjustment) override;
-  virtual void render(ca::Canvas* canvas) const override;
+  virtual void render(ca::Canvas* canvas,
+                      const ca::Mat4& transform) const override;
 
 protected:
   // This view's child views.

@@ -18,7 +18,8 @@
 #include <algorithm>
 #include <string>
 
-#include <nucleus/logging.h>
+#include "canvas/math/transform.h"
+#include "nucleus/logging.h"
 
 #include "elastic/context.h"
 
@@ -41,12 +42,10 @@ ButtonView::ButtonView(Context* context, const std::string& label,
 
   // Set up the label.
   if (buttonFont) {
-#if 0
-    m_labelShape.setString(m_label);
-    m_labelShape.setFont(*buttonFont);
-    m_labelShape.setColor(sf::Color{127, 255, 127});
-    m_labelShape.setCharacterSize(25);
-#endif  // 0
+    m_labelShape.setText(m_label);
+    m_labelShape.setFont(buttonFont);
+    // m_labelShape.setColor(sf::Color{127, 255, 127});
+    m_labelShape.setTextSize(25);
   }
 }
 
@@ -101,6 +100,9 @@ ca::Size<i32> ButtonView::calculateMinSize() const {
   result.y = std::max(result.y, labelSize.y);
 #endif  // 0
 
+  result.width = 100;
+  result.height = 100;
+
   return result;
 }
 
@@ -123,13 +125,18 @@ void ButtonView::layout(const ca::Rect<i32>& rect) {
 #endif  // 0
 }
 
-void ButtonView::render(ca::Canvas* canvas) const {
-  View::render(canvas);
+void ButtonView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
+  View::render(canvas, transform);
+
+  ca::Mat4 local =
+      ca::translate(transform, ca::Vec3{static_cast<f32>(m_rect.pos.x),
+                                        static_cast<f32>(m_rect.pos.y), 0.f});
 
 #if 0
   target.draw(m_backgroundShape);
-  target.draw(m_labelShape);
 #endif  // 0
+
+  m_labelShape.render(canvas, local);
 }
 
 }  // namespace el

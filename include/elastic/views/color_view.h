@@ -33,7 +33,8 @@ public:
 
   // Override: View
   virtual void layout(const ca::Rect<i32>& rect) override;
-  virtual void render(ca::Canvas* canvas) const override;
+  virtual void render(ca::Canvas* canvas,
+                      const ca::Mat4& transform) const override;
 
 private:
   // The color of the view.

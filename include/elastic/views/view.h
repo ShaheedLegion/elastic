@@ -18,6 +18,7 @@
 #include <cstdint>
 #include <string>
 
+#include "canvas/math/mat4.h"
 #include "canvas/rendering/canvas.h"
 #include "canvas/utils/size.h"
 #include "canvas/utils/rect.h"
@@ -105,7 +106,7 @@ public:
   virtual void onKeyReleased(const ca::KeyboardEvent& evt);
 #endif  // 0
 
-  virtual void render(ca::Canvas* canvas) const;
+  virtual void render(ca::Canvas* canvas, const ca::Mat4& transform) const;
 
 protected:
   friend class GroupView;

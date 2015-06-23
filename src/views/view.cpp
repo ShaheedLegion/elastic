@@ -96,7 +96,7 @@ void View::onKeyReleased(const ca::KeyboardEvent& event) {
 }
 #endif  // 0
 
-void View::render(ca::Canvas* canvas) const {
+void View::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 }
 
 }  // namespace el

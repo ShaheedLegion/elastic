@@ -44,7 +44,7 @@ void ColorView::layout(const ca::Rect<i32>& rect) {
 #endif  // 0
 }
 
-void ColorView::render(ca::Canvas* canvas) const {
+void ColorView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
 #if 0
   target.draw(m_drawable, states);
 #endif  // 0

@@ -33,7 +33,7 @@ public:
   // Override: View
   ca::Size<i32> calculateMinSize() const override;
   void layout(const ca::Rect<i32>& rect) override;
-  void render(ca::Canvas* canvas) const override;
+  void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
   // The label we render.
