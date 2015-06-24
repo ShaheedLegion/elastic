@@ -36,7 +36,7 @@ void LinearSizerView::SetOrientation(OrientationType orientation) {
 
 ca::Size<i32> LinearSizerView::calculateMinSize() const {
   ca::Size<i32> minSize{GroupView::calculateMinSize()};
-
+   
   ca::Size<i32> contentSize;
   if (m_orientation == OrientationHorizontal) {
     for (const auto& child : m_children) {
@@ -88,7 +88,9 @@ void LinearSizerView::layoutHorizontal(const ca::Rect<i32>& rect) {
 
   // Calculate the size we have per proportion for each view.
   float singleProportionSize =
-      static_cast<float>(totalSize) / static_cast<float>(totalProportion);
+      (totalProportion > 0)
+          ? static_cast<float>(totalSize) / static_cast<float>(totalProportion)
+          : 0.f;
 
   // Start with the entire area we have available.
   ca::Rect<i32> sectionRect{rect};
@@ -105,7 +107,7 @@ void LinearSizerView::layoutHorizontal(const ca::Rect<i32>& rect) {
 
     // Adjust the top of the layout rect to where the next view will be layed
     // out.
-    sectionRect.size.width += sectionRect.size.width;
+    sectionRect.pos.x += sectionRect.size.width;
   }
 }
 
@@ -130,7 +132,9 @@ void LinearSizerView::layoutVertical(const ca::Rect<i32>& rect) {
 
   // Calculate the size we have per proportion for each view.
   float singleProportionSize =
-      static_cast<float>(totalSize) / static_cast<float>(totalProportion);
+      (totalProportion > 0)
+          ? static_cast<float>(totalSize) / static_cast<float>(totalProportion)
+          : 0.f;
 
   // Start with the entire area we have available.
   ca::Rect<i32> sectionRect{rect};

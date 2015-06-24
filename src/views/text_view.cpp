@@ -14,24 +14,16 @@
 
 #include "elastic/views/text_view.h"
 
+#include <algorithm>
+
 #include "canvas/math/transform.h"
 
 #include "elastic/context.h"
 
 namespace el {
 
-TextView::TextView(Context* context, const std::string& label)
-  : View(context), m_label(label) {
-  // Set up the text shape.
-  ca::Font* labelFont = context->getFont("default");
-
-  // Set up the label.
-  if (labelFont) {
-    m_text.setText(m_label);
-    m_text.setFont(labelFont);
-    // m_text.setColor(sf::Color{255, 255, 255});
-    m_text.setTextSize(30);
-  }
+TextView::TextView(Context* context, ca::Font* font, const std::string& label)
+  : View(context), m_label(label), m_text(font, 30, label) {
 }
 
 TextView::~TextView() {
@@ -44,32 +36,31 @@ void TextView::setLabel(const std::string& label) {
   m_text.setText(label);
 }
 
-ca::Size<i32> TextView::calculateMinSize() const {
-#if 0
-  sf::FloatRect bounds = m_shape.getLocalBounds();
-  return sf::Vector2i{static_cast<int>(std::ceil(bounds.width)),
-                      static_cast<int>(std::ceil(bounds.height))};
-#endif  // 0
-  return ca::Size<i32>{300, 300};
+void TextView::setFont(ca::Font* font) {
+  m_text.setFont(font);
 }
 
-void TextView::layout(const ca::Rect<i32>& rect) {
-#if 0
-  sf::FloatRect floatLabelSize{m_shape.getLocalBounds()};
+ca::Size<i32> TextView::calculateMinSize() const {
+  ca::Size<i32> result{View::calculateMinSize()};
 
-  // Move the shape to the correct position.
-  m_shape.setPosition(
-      sf::Vector2f{static_cast<float>(rect.left) - floatLabelSize.left,
-                   static_cast<float>(rect.top) - floatLabelSize.top});
-#endif  // 0
+  ca::Size<i32> boundSize = m_text.getBounds().size;
+  result.width = std::max(result.width, boundSize.width);
+  result.height = std::max(result.height, boundSize.height);
+
+  return result;
 }
 
 void TextView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
   View::render(canvas, transform);
 
+  // Get the bounds of the text.
+  ca::Rect<i32> bounds = m_text.getBounds();
+
+  // Adjust the text to the correct position.
   ca::Mat4 local =
-      ca::translate(transform, ca::Vec3{static_cast<f32>(m_rect.pos.x),
-                                        static_cast<f32>(m_rect.pos.y), 0.f});
+      transform * ca::translate(ca::Vec3{
+                      static_cast<f32>(m_rect.pos.x - bounds.pos.x),
+                      static_cast<f32>(m_rect.pos.y - bounds.pos.y), 0.f});
 
   m_text.render(canvas, local);
 }

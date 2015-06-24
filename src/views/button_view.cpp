@@ -85,56 +85,25 @@ void ButtonView::onMouseExited(const ca::MouseEvent& event) {
 ca::Size<i32> ButtonView::calculateMinSize() const {
   ca::Size<i32> result{View::calculateMinSize()};
 
-#if 0
-  // Calculate the size of the label.
-  ca::Rect<f32> floatLabelSize{m_labelShape.getLocalBounds()};
+  ca::Size<i32> boundSize = m_labelShape.getBounds().size;
 
-  sf::Vector2i labelSize{static_cast<int>(std::ceil(floatLabelSize.width)),
-                         static_cast<int>(std::ceil(floatLabelSize.height))};
-
-  // Add a border around the label.
-  labelSize.x += 20;
-  labelSize.y += 20;
-
-  result.x = std::max(result.x, labelSize.x);
-  result.y = std::max(result.y, labelSize.y);
-#endif  // 0
-
-  result.width = 100;
-  result.height = 100;
+  result.width = std::max(result.width, boundSize.width);
+  result.height = std::max(result.height, boundSize.height);
 
   return result;
-}
-
-void ButtonView::layout(const ca::Rect<i32>& rect) {
-  View::layout(rect);
-
-#if 0
-  // Move the background shape into position.
-  m_backgroundShape.setPosition(sf::Vector2f{static_cast<float>(rect.left),
-                                             static_cast<float>(rect.top)});
-  m_backgroundShape.setSize(sf::Vector2f{static_cast<float>(rect.width),
-                                         static_cast<float>(rect.height)});
-
-  sf::FloatRect floatLabelSize{m_labelShape.getLocalBounds()};
-
-  // Move the shape to the correct position.
-  m_labelShape.setPosition(
-      sf::Vector2f{static_cast<float>(rect.left + 10) - floatLabelSize.left,
-                   static_cast<float>(rect.top + 10) - floatLabelSize.top});
-#endif  // 0
 }
 
 void ButtonView::render(ca::Canvas* canvas, const ca::Mat4& transform) const {
   View::render(canvas, transform);
 
-  ca::Mat4 local =
-      ca::translate(transform, ca::Vec3{static_cast<f32>(m_rect.pos.x),
-                                        static_cast<f32>(m_rect.pos.y), 0.f});
+  // Get the bounds of the text.
+  ca::Rect<i32> bounds = m_labelShape.getBounds();
 
-#if 0
-  target.draw(m_backgroundShape);
-#endif  // 0
+  // Adjust the text to the correct position.
+  ca::Mat4 local =
+      transform * ca::translate(ca::Vec3{
+                      static_cast<f32>(m_rect.pos.x - bounds.pos.x),
+                      static_cast<f32>(m_rect.pos.y - bounds.pos.y), 0.f});
 
   m_labelShape.render(canvas, local);
 }

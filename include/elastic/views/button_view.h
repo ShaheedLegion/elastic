@@ -47,7 +47,6 @@ public:
   virtual void onMouseEntered(const ca::MouseEvent& event) override;
   virtual void onMouseExited(const ca::MouseEvent& event) override;
   virtual ca::Size<i32> calculateMinSize() const override;
-  virtual void layout(const ca::Rect<i32>& rect) override;
   virtual void render(ca::Canvas* canvas,
                       const ca::Mat4& transform) const override;
 

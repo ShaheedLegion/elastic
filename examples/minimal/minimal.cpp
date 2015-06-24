@@ -15,10 +15,43 @@
 #include "canvas/app.h"
 #include "canvas/rendering/canvas.h"
 
+#include "elastic/simple_context.h"
+#include "elastic/views/image_view.h"
+#include "elastic/views/text_view.h"
+
 class Minimal : public ca::WindowDelegate {
-  void onPaint(ca::Canvas* canvas) override {
-    canvas->clear(ca::Color{255, 0, 0, 255});
+public:
+  Minimal()
+    : m_context(nu::FilePath{
+          FILE_PATH_LITERAL("C:\\Workspace\\elastic\\examples\\res")}) {}
+
+  bool onWindowCreated() override {
+    ca::Texture* texture = m_context.getTexture("canvas.jpg");
+    if (texture) {
+      m_imageView = new el::ImageView(&m_context, texture);
+      m_context.getRoot()->addChild(m_imageView);
+    }
+
+    ca::Font* font = m_context.getFont("sansation.ttf");
+    if (font) {
+      m_labelView = new el::TextView(&m_context, font, "Testing");
+      m_context.getRoot()->addChild(m_labelView);
+    }
+
+    return true;
   }
+
+  void onPaint(ca::Canvas* canvas) override {
+    canvas->clear(ca::Color{31, 63, 95, 255});
+
+    m_context.render(canvas);
+  }
+
+private:
+  el::SimpleContext m_context;
+
+  el::TextView* m_labelView{nullptr};
+  el::ImageView* m_imageView{nullptr};
 };
 
 CANVAS_APP(Minimal);

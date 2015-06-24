@@ -31,7 +31,7 @@ class View;
 class Context {
 public:
   Context();
-  ~Context();
+  ~Context() = default;
 
   // Get the root view of the context.
   ContextView* getRoot() { return &m_contextView; }
@@ -41,6 +41,7 @@ public:
   void setFocusView(View* view);
 
   // Resources
+  virtual ca::Texture* getTexture(const std::string& name) = 0;
   virtual ca::Font* getFont(const std::string& name) = 0;
 
   void onMouseMoved(const ca::MouseEvent& evt);

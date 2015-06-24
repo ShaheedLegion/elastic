@@ -12,43 +12,33 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef ELASTIC_VIEWS_TEXT_VIEW_H_
-#define ELASTIC_VIEWS_TEXT_VIEW_H_
+#ifndef ELASTIC_VIEWS_IMAGE_VIEW_H_
+#define ELASTIC_VIEWS_IMAGE_VIEW_H_
 
-#include "canvas/rendering/text.h"
+#include "canvas/rendering/sprite.h"
+#include "canvas/rendering/texture.h"
 
 #include "elastic/views/view.h"
 
 namespace el {
 
-class TextView : public View {
+class ImageView : public View {
 public:
-  explicit TextView(Context* context, ca::Font* font = nullptr,
-                    const std::string& label = std::string{});
-  ~TextView() override;
-
-  // label
-  const std::string& getLabel() const { return m_label; }
-  void setLabel(const std::string& label);
-
-  // font
-  ca::Font* getFont() const { return m_text.getFont(); }
-  void setFont(ca::Font* font);
+  explicit ImageView(Context* context, ca::Texture* texture);
+  ~ImageView() override = default;
 
   // Override: View
   ca::Size<i32> calculateMinSize() const override;
+  void layout(const ca::Rect<i32>& rect) override;
   void render(ca::Canvas* canvas, const ca::Mat4& transform) const override;
 
 private:
-  // The label we render.
-  std::string m_label;
+  // The sprite we use to render the image.
+  ca::Sprite m_sprite;
 
-  // The shape we use to render the text.
-  ca::Text m_text;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(TextView);
+  DISALLOW_IMPLICIT_CONSTRUCTORS(ImageView);
 };
 
 }  // namespace el
 
-#endif  // ELASTIC_VIEWS_TEXT_VIEW_H_
+#endif  // ELASTIC_VIEWS_IMAGE_VIEW_H_

@@ -21,9 +21,6 @@ namespace el {
 Context::Context() : m_contextView(this) {
 }
 
-Context::~Context() {
-}
-
 void Context::setFocusView(View* view) {
   m_focusView = view;
 }
@@ -44,15 +41,15 @@ void Context::onMouseReleased(const ca::MouseEvent& evt) {
 void Context::handleInput(sf::Event& event) {
   switch (event.type) {
     case sf::Event::MouseButtonPressed: {
-      
+
     } break;
 
     case sf::Event::MouseMoved: {
-      
+
     } break;
 
     case sf::Event::MouseButtonReleased: {
-      
+
     } break;
 
     case sf::Event::MouseWheelMoved: {
@@ -83,11 +80,11 @@ void Context::render(ca::Canvas* canvas) const {
   // Get the size of the render target in pixels for the UI to render.
   ca::Rect<i32> layoutRect{ca::Pos<i32>{}, canvas->getSize()};
 
-  ca::Mat4 transform =
-      ca::ortho(0.0f, static_cast<f32>(layoutRect.size.width),
-                static_cast<f32>(layoutRect.size.height), 0.0f);
-
   m_contextView.layout(layoutRect);
+
+  ca::Mat4 transform = ca::ortho(0.f, static_cast<f32>(layoutRect.size.width),
+                                 static_cast<f32>(layoutRect.size.height), 0.f);
+
   m_contextView.render(canvas, transform);
 }
 
