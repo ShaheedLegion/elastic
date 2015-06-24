@@ -15,14 +15,14 @@
 #include "canvas/app.h"
 #include "canvas/rendering/canvas.h"
 
-#include "elastic/simple_context.h"
+#include "elastic/simple_window_delegate.h"
 #include "elastic/views/image_view.h"
 #include "elastic/views/text_view.h"
 
-class Minimal : public ca::WindowDelegate {
+class Minimal : public el::SimpleWindowDelegate {
 public:
   Minimal()
-    : m_context(nu::FilePath{
+    : SimpleWindowDelegate(nu::FilePath{
           FILE_PATH_LITERAL("C:\\Workspace\\elastic\\examples\\res")}) {}
 
   bool onWindowCreated() override {
@@ -44,12 +44,11 @@ public:
   void onPaint(ca::Canvas* canvas) override {
     canvas->clear(ca::Color{31, 63, 95, 255});
 
-    m_context.render(canvas);
+    // Render the UI.
+    SimpleWindowDelegate::onPaint(canvas);
   }
 
 private:
-  el::SimpleContext m_context;
-
   el::TextView* m_labelView{nullptr};
   el::ImageView* m_imageView{nullptr};
 };

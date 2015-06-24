@@ -25,6 +25,10 @@ SimpleResourceManager::SimpleResourceManager(const nu::FilePath& rootPath)
   : m_rootPath(rootPath) {
 }
 
+void SimpleResourceManager::setRootPath(const nu::FilePath& rootPath) {
+  m_rootPath = rootPath;
+}
+
 ca::Texture* SimpleResourceManager::getTexture(const nu::FilePath& path) {
   nu::FilePath pathToResource = m_rootPath.append(path);
 

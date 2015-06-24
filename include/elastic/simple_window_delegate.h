@@ -12,30 +12,36 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#ifndef ELASTIC_SIMPLE_WINDOW_DELEGATE_H_
+#define ELASTIC_SIMPLE_WINDOW_DELEGATE_H_
+
+#include "canvas/windows/window_delegate.h"
+
 #include "elastic/simple_context.h"
 
 namespace el {
 
-SimpleContext::SimpleContext(const nu::FilePath& resourceRootPath)
-  : m_resourceManager(resourceRootPath) {
-}
+class SimpleWindowDelegate : public ca::WindowDelegate {
+public:
+  ~SimpleWindowDelegate() = default;
 
-const nu::FilePath& SimpleContext::getRootPath() const {
-  return m_resourceManager.getRootPath();
-}
+  // Override: ca::WindowDelegate
+  void onMouseMoved(const ca::MouseEvent& event) override;
+  void onMousePressed(const ca::MouseEvent& event) override;
+  void onMouseReleased(const ca::MouseEvent& event) override;
 
-void SimpleContext::setRootPath(const nu::FilePath& rootPath) {
-  m_resourceManager.setRootPath(rootPath);
-}
+  void onPaint(ca::Canvas* canvas) override { m_context.render(canvas); }
 
-ca::Texture* SimpleContext::getTexture(const std::string& name) {
-  nu::FilePath::StringType str(name.begin(), name.end());
-  return m_resourceManager.getTexture(str);
-}
+protected:
+  // Construct the window delegate with a resource root path.
+  explicit SimpleWindowDelegate(const nu::FilePath& rootPath);
 
-ca::Font* SimpleContext::getFont(const std::string& name) {
-  nu::FilePath::StringType str(name.begin(), name.end());
-  return m_resourceManager.getFont(str);
-}
+  // The UI context we'll use.
+  SimpleContext m_context;
+
+  DISALLOW_COPY_AND_ASSIGN(SimpleWindowDelegate);
+};
 
 }  // namespace el
+
+#endif  // ELASTIC_SIMPLE_WINDOW_DELEGATE_H_

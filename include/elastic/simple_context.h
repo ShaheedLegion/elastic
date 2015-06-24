@@ -25,8 +25,12 @@ namespace el {
 
 class SimpleContext : public Context {
 public:
-  explicit SimpleContext(const nu::FilePath& resourceRootPath);
+  explicit SimpleContext(const nu::FilePath& resourceRootPath = nu::FilePath{});
   ~SimpleContext() = default;
+
+  // Get/set the root path for resources.
+  const nu::FilePath& getRootPath() const;
+  void setRootPath(const nu::FilePath& rootPath);
 
   // Override: Context
   ca::Texture* getTexture(const std::string& name) override;

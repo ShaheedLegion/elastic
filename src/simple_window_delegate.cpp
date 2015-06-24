@@ -12,30 +12,27 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "elastic/simple_context.h"
+#include "elastic/simple_window_delegate.h"
 
 namespace el {
 
-SimpleContext::SimpleContext(const nu::FilePath& resourceRootPath)
-  : m_resourceManager(resourceRootPath) {
+void SimpleWindowDelegate::onMouseMoved(const ca::MouseEvent& event) {
+  WindowDelegate::onMouseMoved(event);
+  m_context.onMouseMoved(event);
 }
 
-const nu::FilePath& SimpleContext::getRootPath() const {
-  return m_resourceManager.getRootPath();
+void SimpleWindowDelegate::onMousePressed(const ca::MouseEvent& event) {
+  WindowDelegate::onMousePressed(event);
+  m_context.onMousePressed(event);
 }
 
-void SimpleContext::setRootPath(const nu::FilePath& rootPath) {
-  m_resourceManager.setRootPath(rootPath);
+void SimpleWindowDelegate::onMouseReleased(const ca::MouseEvent& event) {
+  WindowDelegate::onMouseReleased(event);
+  m_context.onMouseReleased(event);
 }
 
-ca::Texture* SimpleContext::getTexture(const std::string& name) {
-  nu::FilePath::StringType str(name.begin(), name.end());
-  return m_resourceManager.getTexture(str);
-}
-
-ca::Font* SimpleContext::getFont(const std::string& name) {
-  nu::FilePath::StringType str(name.begin(), name.end());
-  return m_resourceManager.getFont(str);
+SimpleWindowDelegate::SimpleWindowDelegate(const nu::FilePath& rootPath)
+  : m_context(rootPath) {
 }
 
 }  // namespace el

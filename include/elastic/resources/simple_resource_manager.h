@@ -27,6 +27,10 @@ public:
   explicit SimpleResourceManager(const nu::FilePath& rootPath = nu::FilePath{});
   ~SimpleResourceManager() = default;
 
+  // Get/set the root path.
+  const nu::FilePath& getRootPath() const { return m_rootPath; }
+  void setRootPath(const nu::FilePath& rootPath);
+
   // Get a texture resource.
   ca::Texture* getTexture(const nu::FilePath& path);
 
